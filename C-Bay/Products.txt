@@ -1,0 +1,41 @@
+Shower head,new,40.0,4,Home Improvement,1-275-339-2233
+Nissan 80z,used,4599.0,4,Automotive,1-275-339-4352
+Grill,used,100.0,3,Home Improvement,1-275-339-6574
+Toaster,new,45.0,2,Home Improvement,1-328-444-2314
+Headphones,new,50.0,4,Electronics,jimmy20@yahoo.com
+Electric heater,used,80.0,4,Home Improvement,pattymatson@yahoo.com
+Vape Pen,new,40.0,1,Electronic,1-252-324-1919
+Monitor,used,120.99,4,Electronic,Jimlahey@gmail.com
+Yoga Mat,new,19.99,2,Health,1-675-339-3291
+30lb Dumbbells,used,25.0,4,Exercise,jerryrobinson@yahoo.com
+Humidifier,used,60.0,4,Home Improvement,1-555-333-2392
+Hockey Stick,used,99.99,5,Exercise,billybob@yahoo.com
+Coffee Maker,new,39.5,5,Home Improvement,1-850-215-6574
+Shower head,new,40.0,4,Home Improvement,1-275-339-2233
+Protein Powder,new,75.0,4,Health,1-439-222-3251
+Table,new,250.0,3,Furniture,1-325-323-9945
+Stool,used,10.0,5,Furniture,1-325-659-8833
+Clock,used,15.0,1,Home Improvement,1-653-449-7733
+Television,used,349.99,4,Electronic,kimmyjones@gmail.com
+Shower Curtain,new,40.0,2,Home Improvement,1-452-659-9238
+Multivitamin,new,48.0,3,Health,1-665-939-6133
+Microwave,new,300.0,5,Home Improvement,1-281-432-3241
+Crock pot,new,100.0,2,Home Improvement,1-317-372-7634
+Jacket,new,99.99,4,Clothing,1-832-322-1234
+Jeans,used,25.99,1,Clothing,1-452-324-8324
+Dresser,used,89.99,5,Home Improvement,1-262-324-8325
+Bed frame,used,159.99,4,Furniture,1-392-932-9982
+Sweater,used,17.99,5,Clothing,captainrocket@gmail.com
+Hat,new,30.0,1,Clothing,rickyjames@yahoo.com
+Pool table,used,250.0,4,Furniture,1-392-324-6243
+Suit,used,89.99,2,Clothing,1-424-234-4265
+Keyboard,used,56.99,4,Electronics,angelaperkins@gmail.com
+Air purifier,used,69.99,3,Home Improvement,1-723-464-4732
+Chair,new,50.0,4,Furniture,mistagibbs@yahoo.com
+Shampoo,new,24.0,5,Health,1-555-693-9121
+Fly swatter,new,4.99,2,Home Improvement,1-151-521-5123
+Mouse,new,53.99,4,Electronics,andyklop@yahoo.com
+Door,new,87.99,3,Home Improvement,1-333-743-3424
+T-shirt,used,20.0,3,Clothing,1-593-123-3151
+Pants,used,32.99,5,Clothing,1-323-444-4176
+Lamp,used,40.0,5,Home Improvement,1-923-141-9152
