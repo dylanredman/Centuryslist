@@ -97,8 +97,5 @@ public class Product {
 		return description + "," + status + "," + price + "," + rating + "," + type
 				+ "," + contactInfo;
 	}
-	
-	
-	
-	
+
 }
