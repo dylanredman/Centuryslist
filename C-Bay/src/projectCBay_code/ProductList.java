@@ -104,20 +104,6 @@ public class ProductList{
 					}
 				}
 			}
-		
-		
-		/*int index;
-		index = 0;
-		while((index < manyItems) && (target != data[index]))
-			index++;
-		if(index == manyItems) {
-			return false;
-		}
-		else {
-			manyItems--;
-			data[index] = data[manyItems];
-			return true;
-		}*/
 	}
 	
 	
@@ -135,8 +121,6 @@ public class ProductList{
 	public Product[] search(String target) {
 		Product[] p = new Product[manyItems];
 		int counter = 0;
-		//int i = 0;
-		//while(i<=manyItems) {
 			for (int i = 0; i < manyItems; i++) {
 				if(data[i] == null) {
 					
@@ -144,12 +128,10 @@ public class ProductList{
 				else if(data[i].getDescription().toLowerCase().equals(target.toLowerCase())) {
 					p[counter] = data[i];
 					counter++;
-					//break;
 				}
 			}
 			data = p;
 			manyItems = data.length;
-		//}
 		return data;
 	}
 	
