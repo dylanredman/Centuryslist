@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ProductList{
 	
-	private Product[] data = new Product[41];
+	private Product[] data = new Product[40];
 	private int manyItems;
 	
 	private static final int DESCRIPTION = 0;
@@ -87,7 +87,7 @@ public class ProductList{
 			outputFile = new PrintWriter(new FileOutputStream(fileName, true));
 			for (int i = 0; i < manyItems; i++) {
 				if(data[i] != null)
-					outputFile.println(data[i].toString());
+					outputFile.println(data[i].list());
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -96,8 +96,18 @@ public class ProductList{
 	}
 	
 
-	public boolean remove(Product target) {
-		int index;
+	public void remove(Product target) {
+		for (int i = 0; i < data.length; i++) {
+			if(data[i] != null && target.getDescription() != null) {
+				if(data[i].getDescription().equals(target.getDescription())) {
+					data[i] = data[manyItems - 1];
+					manyItems--;
+					}
+				}
+			}
+		
+		
+		/*int index;
 		index = 0;
 		while((index < manyItems) && (target != data[index]))
 			index++;
@@ -108,8 +118,9 @@ public class ProductList{
 			manyItems--;
 			data[index] = data[manyItems];
 			return true;
-		}
+		}*/
 	}
+	
 	
 
 	public void ensureCapacity(int i) {
@@ -128,13 +139,16 @@ public class ProductList{
 		//int i = 0;
 		//while(i<=manyItems) {
 			for (int i = 0; i < manyItems; i++) {
-				if(data[i].getDescription().toLowerCase().equals(target.toLowerCase())) {
+				if(data[i] == null) {
+					
+				}
+				else if(data[i].getDescription().toLowerCase().equals(target.toLowerCase())) {
 					p[counter] = data[i];
 					counter++;
 					//break;
 				}
-				data = p;
 			}
+			data = p;
 			manyItems = data.length;
 		//}
 		return data;
@@ -142,19 +156,22 @@ public class ProductList{
 	
 	public Product[] lowerToHigherPriceSort() {
 		Product[] p = new Product[manyItems]; 
+		
 		p = data;
 		//Bubble Sort
-        for (int i = 0; i < manyItems; i++) 
-            for (int j = 1; j < manyItems-i; j++) 
-            	if(p[j] == null) {
+        for (int i = 0; i < manyItems; i++) {
+            for (int j = 1; j < manyItems-i; j++) {
+            	if(p[j-1] == null || p[j] == null) {
             	}
-            	else if (p[j].getPrice() > p[j+1].getPrice()) 
+            	else if (p[j-1].getPrice() > p[j].getPrice()) 
                 { 
-                    Product temp = p[j]; 
-                    p[j] = p[j+1]; 
-                    p[j+1] = temp; 
-                } 
-        data = p;
+                    Product temp = p[j-1]; 
+                    p[j-1] = p[j]; 
+                    p[j] = temp; 
+                }
+            }
+        }
+        this.data = p;
 		return data;
 	}
 	
@@ -162,92 +179,159 @@ public class ProductList{
 		Product[] p = new Product[manyItems]; 
 		p = data;
 		//Bubble Sort
-        for (int i = 0; i < manyItems; i++) 
-            for (int j = 1; j < manyItems-i; j++) 
-            	if(p[j] == null) {
+        for (int i = 0; i < manyItems; i++) {
+            for (int j = 1; j < manyItems-i; j++) {
+            	if(p[j-1] == null || p[j] == null) {
             	}
-            	else if (p[j].getPrice() > p[j+1].getPrice()) 
+            	else if (p[j-1].getPrice() < p[j].getPrice()) 
                 { 
                     Product temp = p[j-1]; 
                     p[j-1] = p[j]; 
                     p[j] = temp; 
                 }
-        data = p;
-		return data;
-	}
-	
-	public Product[] newProducts() {
-		Product[] p = new Product[manyItems]; 
-		p = data;
-		int count = 0;
-		//Bubble Sort
-        for (int i = 0; i < manyItems; i++)  
-        	if (p[i].getStatus().equals("new")) 
-            {
-                Product[] temp = new Product[manyItems];
-                temp[count] = p[i];
-                count++;
-                p = temp;
             }
-        data = p;
-        manyItems = data.length;
+        }
+	
+        this.data = p;
 		return data;
 	}
 	
-	public Product[] usedProducts() {
+	public Product[] conditionProducts(String ans) {
 		Product[] p = new Product[manyItems]; 
-		p = data;
 		int count = 0;
-		//Bubble Sort
-        for (int i = 0; i < manyItems; i++)  
-        	if (p[i] == null) {
-        	}
-        	else if (p[i].getStatus().equals("used")) 
-            {
-                Product[] temp = new Product[manyItems];
-                temp[count] = p[i];
-                count++;
-                p = temp;
-            }
-        data = p;
-        manyItems = data.length;
-		return data;
-	}
-	
-	public Product[] filterByTypeAutomotive(String type) {
-		int count = 0;
-		Product[] temp = new Product[manyItems];
-		for (int i = 0; i < manyItems; i++) {
-			if(data[i].getType().equals("Automotive")) {
-				temp[count] = data[i];
-				count++;
+		if(ans.equals("new")) {
+			for (int i = 0; i < manyItems; i++) {
+				if(data[i] == null) {
+				}
+				else if (data[i].getStatus().equals("new")) 
+				{
+					p[count] = data[i];
+					count++;
+				}
 			}
 		}
-		manyItems = temp.length;
-		return temp;
+		else if(ans.equals("used")) {
+			for (int i = 0; i < manyItems; i++) {
+				if(data[i] == null) {
+				}
+				else if (data[i].getStatus().equals("used")) 
+				{
+					p[count] = data[i];
+					count++;
+				}
+			}
+		}
+        this.data = p;
+        manyItems = data.length;
+		return data;
 	}
 	
+	
+	public Product[] highlyRatedSearch() {
+		int n = manyItems; 
+        // Selection sort
+        for (int i = 0; i < n-1; i++) 
+        {  
+            int min = i; 
+            for (int j = i+1; j < n; j++) 
+            	if(data[j] == null) {
+            	}
+            	else if (data[j].getRating() < data[min].getRating()) 
+                    min = j; 
+            Product temp = data[min]; 
+            data[min]= data[i]; 
+            data[i] = temp; 
+        } 
+		return data;
+	}
+	
+	public Product[] typeSearch(String type) {
+		// Returns a new array with only items of the given type.
+		Product[] p =  new Product[manyItems];
+		Product[] newP =  new Product[manyItems];
+		p = data;
+		int n = 0;
+		int x = 0;
+		while(n < manyItems) {
+			if(p[n] == null) {
+			}
+			else if (p[n].getType().equals(type)){
+				newP[x] = p[n];
+				x++;
+			}
+			n++;
+		}
+		return data = newP;
+	}
+	
+	 public Product[] sortAlphabet() {
+		 Product[] x = new Product[manyItems];
+		 x = data;
+		 int j;
+         boolean flag = true; 
+         Product temp;
+
+         while ( flag )
+         {
+        	 flag = false;
+             for ( j = 0;  j < x.length - 1;  j++ )
+             {
+            	 if(x[j+1] == null) {	 
+            	 }
+            	 else if(x[j].compareTo(x[j+1]) > 0)
+                 {              
+            		 temp = x[j];
+                     x[j] = x [j+1];
+                     x[j+1] = temp; 
+                     flag = true;
+                 	} 
+             	} 
+         	} 
+
+         data = x;
+         return data;
+         }
+
+	
 	public void clearFilters() {
-		int num = data.length;
-		for (int i = 0; i < num; i++) {
-			remove(data[i]);
+		for (int i = 0; i < data.length; i++) {
+			data[i] = null;
 		}
 		retrieveList();
 	}
  	
-	public Product product(int index) {
-		return data[index];
+	public Product menuProduct(Product product) {
+		Product p = null;
+		for (int i = 0; i < data.length; i++) {
+			if(data[i].equals(product));
+				p = data[i];
 		}
+		return p;
+	}
+	
+	public Product setUpMenuProducts(int index) {
+		return data[index];
+	}
+
 	
 	public String listProducts() {
-		String ans = null;
+		String ans = "";
 		for (int i = 0; i < manyItems; i++) {
 			if(data[i] == null) {
 			}
-			else
+			else {
 				ans += "Description: " + data[i].getDescription() + "\nStatus: " + data[i].getStatus()+ "\nPrice: " + data[i].getPrice()
 					+ "\nUser Rating: " + data[i].getRating() + "\n";
 		}
+		}
 		return ans;
+	}
+	
+	public Product[] products() {
+		Product[] x = new Product[manyItems];
+		for (int i = 0; i < manyItems; i++) {
+			x[i]= data[i];
+		}
+		return x;
 	}
 }

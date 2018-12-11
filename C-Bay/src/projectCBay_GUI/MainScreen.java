@@ -24,12 +24,16 @@ import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class MainScreen extends JFrame{
 	
 	private ProductList p = new ProductList();
 	private int num = p.getNumOfItems();
 	private CartStack c = new CartStack();
+	
+	
 	
 	private JRadioButton rdbtnNew = new JRadioButton("New");
 	private JRadioButton rdbtnUsed = new JRadioButton("Used");
@@ -43,7 +47,6 @@ public class MainScreen extends JFrame{
 	private JRadioButton radioButtonLowestToHighest = new JRadioButton("Lowest to Highest");
 	
 	private JButton btnClearFilters = new JButton("Clear Filters");
-	private JButton addProductBtn = new JButton("Add Product");
 	private JButton searchBtn = new JButton("Search");
 	private JButton addToCartBtn = new JButton("Add to Cart");
 	
@@ -72,6 +75,14 @@ public class MainScreen extends JFrame{
 	private DefaultListModel<Product> catalog = new DefaultListModel();
 	private DefaultListModel<Product> cart = new DefaultListModel();
 	
+	private final JPanel otherSortFilters = new JPanel();
+	private final JRadioButton rdbtnSortAlphabetically = new JRadioButton("Sort Alphabetically");
+	private final JRadioButton rdbtnHighlyRated = new JRadioButton("Sort By Rating(Lowest to Highest)");
+	private final JPanel totalCostPanel = new JPanel();
+	private final JButton btnCheckout = new JButton("Checkout");
+	private final JPanel checkoutBtnpanel = new JPanel();
+	private final JButton btnRemoveFromCart = new JButton("Remove From Cart");
+	
 
 
 	public MainScreen(String title, ProductList products) {
@@ -79,21 +90,33 @@ public class MainScreen extends JFrame{
 		setSize(2400, 1200);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
-		getContentPane().add(sidePanel, BorderLayout.WEST);
-		getContentPane().add(welcomePanel, BorderLayout.NORTH);
-		getContentPane().add(displayPanel, BorderLayout.CENTER);
-		resetShoppingMenu();
+		setUpShoppingMenu();
 		setContents();
 		addActionListeners();		
 	}
 	
 	
 	public void setContents() {
-		sidePanel.setLayout(new GridLayout(4, 1, 0, 0));
+		
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().add(sidePanel, BorderLayout.WEST);
+		getContentPane().add(welcomePanel, BorderLayout.NORTH);
+		getContentPane().add(displayPanel, BorderLayout.CENTER);
+		getContentPane().add(totalCostPanel, BorderLayout.EAST);
+		
+		sidePanel.setLayout(new GridLayout(5, 1, 0, 0));
 		sidePanel.add(searchBarAndStatusPanel);
 		sidePanel.add(filterPanel);
 		sidePanel.add(pricePanel);
+		
+		sidePanel.add(otherSortFilters);
+		otherSortFilters.setLayout(new GridLayout(2, 1, 0, 0));
+		rdbtnSortAlphabetically.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		otherSortFilters.add(rdbtnSortAlphabetically);
+		rdbtnHighlyRated.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
+		otherSortFilters.add(rdbtnHighlyRated);
 		sidePanel.add(addProductPanel);
 		
 		displayPanel.setLayout(new GridLayout(1, 3, 0, 0));
@@ -144,8 +167,6 @@ public class MainScreen extends JFrame{
 		addProductPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		btnClearFilters.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		addProductPanel.add(btnClearFilters);
-		addProductBtn.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		addProductPanel.add(addProductBtn);
 		
 		welcomeLbl.setFont(new Font("Lucida Fax", Font.BOLD, 30));
 		welcomePanel.add(welcomeLbl);
@@ -156,6 +177,9 @@ public class MainScreen extends JFrame{
 		addToCartPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		addToCartPanel.add(addToCartBtn);
 		
+		
+		addToCartPanel.add(btnRemoveFromCart);
+		
 		cartList.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -163,31 +187,56 @@ public class MainScreen extends JFrame{
 
 		scrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		totalCostPanel.setLayout(new GridLayout(6, 2, 0, 0));
+		
+		totalCostPanel.add(checkoutBtnpanel);
+		checkoutBtnpanel.add(btnCheckout);
 	}
 		
-	public void resetShoppingMenu() {
+	public void setUpShoppingMenu() {
 		this.catalog.clear();
 		for (int i = 0; i < num; i++) {
-			this.catalog.addElement(p.product(i));
+			if(p.setUpMenuProducts(i) == null) {
+			}
+			else
+				this.catalog.addElement(p.setUpMenuProducts(i));
 		}
 		shoppingList = new JList<>(catalog);
 		scrollPane = new JScrollPane(shoppingList);
+		cartList = new JList<>(cart);
+		cartList.setForeground(Color.BLACK);
+		cartList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane2 = new JScrollPane(cartList);
 	}
 	
 	public void addActionListeners() {
 		rdbtnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				shoppingList = new JList<>(p.newProducts());
 				rdbtnUsed.setEnabled(false);
 				rdbtnNew.setEnabled(false);
+				Product[] temp = p.conditionProducts("new");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnUsed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				shoppingList = new JList<>(p.usedProducts());
 				rdbtnUsed.setEnabled(false);
 				rdbtnNew.setEnabled(false);
+				Product[] temp = p.conditionProducts("used");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
@@ -199,88 +248,156 @@ public class MainScreen extends JFrame{
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Automotive");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnClothing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				rdbtnElectronics.setEnabled(false);
 				rdbtnAutomotive.setEnabled(false);
 				rdbtnClothing.setEnabled(false);
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Clothing");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnElectronics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				rdbtnElectronics.setEnabled(false);
 				rdbtnAutomotive.setEnabled(false);
 				rdbtnClothing.setEnabled(false);
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Electronics");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnHealth.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				rdbtnElectronics.setEnabled(false);
 				rdbtnAutomotive.setEnabled(false);
 				rdbtnClothing.setEnabled(false);
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Health");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnFurniture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				rdbtnElectronics.setEnabled(false);
 				rdbtnAutomotive.setEnabled(false);
 				rdbtnClothing.setEnabled(false);
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Furniture");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		rdbtnHomeImprovement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			
 				rdbtnElectronics.setEnabled(false);
 				rdbtnAutomotive.setEnabled(false);
 				rdbtnClothing.setEnabled(false);
 				rdbtnHealth.setEnabled(false);
 				rdbtnFurniture.setEnabled(false);
 				rdbtnHomeImprovement.setEnabled(false);
+				Product[] temp = p.typeSearch("Home Improvement");
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		radioButtonHighestToLowest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				shoppingList = new JList<>(p.higherToLowerPriceSort());
 				radioButtonHighestToLowest.setEnabled(false);
 				radioButtonLowestToHighest.setEnabled(false);
+				Product[] temp = p.higherToLowerPriceSort();
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 			}
 		});
 		
 		radioButtonLowestToHighest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				shoppingList = new JList<>(p.lowerToHigherPriceSort());
+				Product[] temp = p.lowerToHigherPriceSort();
 				radioButtonHighestToLowest.setEnabled(false);
 				radioButtonLowestToHighest.setEnabled(false);
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}	
 			}
 		});
 
 		btnClearFilters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				p.clearFilters();
+				for (int i = 0; i < cart.getSize(); i++) {
+					p.remove(cart.getElementAt(i));
+				}
+				Product[] temp = p.products();
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 				rdbtnUsed.setEnabled(true);
 				rdbtnNew.setEnabled(true);
 				rdbtnUsed.setSelected(false);
@@ -293,6 +410,8 @@ public class MainScreen extends JFrame{
 				rdbtnHealth.setEnabled(true);
 				rdbtnFurniture.setEnabled(true);
 				rdbtnHomeImprovement.setEnabled(true);
+				rdbtnHighlyRated.setEnabled(true);
+				rdbtnSortAlphabetically.setEnabled(true);
 				radioButtonHighestToLowest.setSelected(false);
 				radioButtonLowestToHighest.setSelected(false);
 				rdbtnElectronics.setSelected(false);
@@ -301,20 +420,96 @@ public class MainScreen extends JFrame{
 				rdbtnHealth.setSelected(false);
 				rdbtnFurniture.setSelected(false);
 				rdbtnHomeImprovement.setSelected(false);
+				rdbtnHighlyRated.setSelected(false);
+				rdbtnSortAlphabetically.setSelected(false);
 			}
 		});	
 		
 		addToCartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(shoppingList.isSelectionEmpty() == false) {
-					cart.addElement((Product) shoppingList.getSelectedValue());
-					c.addProductToCart((Product) shoppingList.getSelectedValue());
-					setContents();
+					Product products = (Product) shoppingList.getSelectedValue();
+					cart.addElement(products);
+					c.addProductToCart(products);
+					p.remove(products);
+					catalog.removeElement(products);
+					
 				}
-				else if(shoppingList.isSelectionEmpty() == false)
+				else
 					JOptionPane.showMessageDialog(null, "Nothing Selected");
+			}
+		});
+		
+		searchBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Product[] temp = p.search(searchTxtFld.getText());
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
 				
 			}
 		});
+		
+		rdbtnHighlyRated.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Product[] temp = p.highlyRatedSearch();
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
+				rdbtnHighlyRated.setEnabled(false);
+				rdbtnSortAlphabetically.setEnabled(false);
+			}
+		});
+		
+		rdbtnSortAlphabetically.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Product[] temp = p.sortAlphabet();
+				catalog.clear();
+				for (int i = 0; i < temp.length; i++) {
+					if(temp[i] == null) {
+					}
+					else
+						catalog.addElement(temp[i]);
+				}
+				rdbtnSortAlphabetically.setEnabled(false);
+				rdbtnHighlyRated.setEnabled(false);
+			}
+		});
+		
+		btnCheckout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int confirmed = JOptionPane.showConfirmDialog
+						(null, "Are you done shopping and want to continue to your cart?","Yes",JOptionPane.YES_NO_OPTION);
+				if (confirmed == JOptionPane.YES_OPTION) {
+				double total = c.totalCost();
+				BuyingScreen buy = new BuyingScreen(total, p);
+				buy.setVisible(true);
+				cart.clear();
+				}
+			}
+		});
+		
+		btnRemoveFromCart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cartList.isSelectionEmpty() == false) {
+					Product product = (Product) cartList.getSelectedValue();
+					cart.removeElement(product);
+					p.add(product);
+					c.remove(product);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Nothing Selected");
+			}
+			
+		});
+		
 	}
 }

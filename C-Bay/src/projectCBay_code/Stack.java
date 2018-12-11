@@ -35,19 +35,24 @@ public class Stack<E> {
 	
 	
 	public E pop() {
-		E answer;
-		if (isEmpty()) 
-			throw new EmptyStackException();
+		E answer = null;
+		if (isEmpty()) {
+		}
+		else {
 		answer = (E) stack[count - 1];
+		}
 		count--;
 		return answer;	
 	}
 	
 	
 	public E peek() {
-		if (isEmpty()) 
-			throw new EmptyStackException();
-		E element = (E) stack[count - 1];
+		E element = null;
+		if (isEmpty()) {
+		}
+		else{
+			element = (E) stack[count - 1];
+		}
 		return element;
 	}
 	

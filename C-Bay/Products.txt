@@ -11,7 +11,6 @@ Yoga Mat,new,19.99,2,Health,1-675-339-3291
 Humidifier,used,60.0,4,Home Improvement,1-555-333-2392
 Hockey Stick,used,99.99,5,Exercise,billybob@yahoo.com
 Coffee Maker,new,39.5,5,Home Improvement,1-850-215-6574
-Shower head,new,40.0,4,Home Improvement,1-275-339-2233
 Protein Powder,new,75.0,4,Health,1-439-222-3251
 Table,new,250.0,3,Furniture,1-325-323-9945
 Stool,used,10.0,5,Furniture,1-325-659-8833

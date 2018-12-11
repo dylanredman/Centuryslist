@@ -1,6 +1,6 @@
 package projectCBay_code;
 
-public class Product {
+public class Product implements Comparable<Product>{
 
 	private String picture;
 	private String description;
@@ -90,12 +90,26 @@ public class Product {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String list() {
+		return description + "," + status + "," + price + "," + rating + "," + type
+				+ "," + contactInfo;
+	}
 
 
 	@Override
 	public String toString() {
-		return description + "," + status + "," + price + "," + rating + "," + type
-				+ "," + contactInfo;
+		return description + "    $" + price;
+	}
+
+
+	public int compareTo(Product product) {
+		int compareInt = this.description.compareTo(product.description);
+		if(compareInt < 0)
+			return -1;
+		if(compareInt > 0)
+			return 1;
+		return 0;
 	}
 
 }
