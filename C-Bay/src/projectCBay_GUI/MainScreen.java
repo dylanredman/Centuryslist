@@ -166,6 +166,7 @@ public class MainScreen extends JFrame{
 		
 		addProductPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		btnClearFilters.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		
 		addProductPanel.add(btnClearFilters);
 		
 		welcomeLbl.setFont(new Font("Lucida Fax", Font.BOLD, 30));

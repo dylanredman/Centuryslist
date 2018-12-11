@@ -64,6 +64,7 @@ public class BuyingScreen extends JFrame{
 				setVisible(false);
 			}
 		});
+		
 		costPanel.add(buyBtn);
 		buyBtn.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		

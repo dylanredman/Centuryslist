@@ -94,7 +94,6 @@ public class ProductList{
 		}
 		outputFile.close();
 	}
-	
 
 	public void remove(Product target) {
 		for (int i = 0; i < data.length; i++) {
